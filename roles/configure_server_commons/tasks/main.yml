@@ -41,7 +41,7 @@
 
 - name: Configure Name Resolution
   become: true
-  shell: echo nameserver "{{ hostvars[gold].ec2_private_ip_address }}"
+  shell: echo nameserver "{{ hostvars[gold].ec2_private_ip_address }}" > /etc/resolv.conf
   when: ec2_tag_Name | lower != "gold"
 
 - name: Update and upgrade apt packages

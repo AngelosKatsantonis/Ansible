@@ -18,3 +18,18 @@
     name: ['docker-ce', 'docker-ce-cli','containerd.io', 'docker-compose']
     state: latest
     update_cache: yes
+
+- name: Configure custom dns for docker
+  become: true
+  template:
+    src: templates/daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restart docker service
+  become: true
+  service:
+    name: docker
+    state: restarted
