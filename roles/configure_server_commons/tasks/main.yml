@@ -1,0 +1,65 @@
+---
+# Add here a task to find the dns server vpc ip
+# Manage Files  
+- name: Disable cloud-init
+  become: true
+  file:
+    path: /etc/cloud/cloud-init.disable
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+# Manage Package
+- name: Remove cloud-init
+  become: true
+  apt:
+    name: cloud*
+    state: absent      
+    purge: yes
+
+- name: Modify dhclient hooks
+  become: true
+  copy:
+    src: "templates/nodnsupdate"
+    dest: "/etc/dhcp/dhclient-enter-hooks.d/nodnsupdate"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Configure Hostname, Hosts, Repos
+  become: true
+  shell: "{{ item }}"
+  with_items:
+    - hostname "{{ ec2_tag_Name | quote }}"
+    - echo "{{ ec2_tag_Name | quote }}" > /etc/hostname 
+    - echo 127.0.0.1 "{{ ec2_tag_Name | quote }}" >> /etc/hosts
+    - echo deb http://deb.debian.org/debian/ oldstable main > /etc/apt/sources.list
+    - echo deb http://deb.debian.org/debian/ oldstable-updates main >> /etc/apt/sources.list
+    - echo deb http://deb.debian.org/debian-security oldstable/updates main >> /etc/apt/sources.list
+    - echo deb http://ftp.debian.org/debian stretch-backports main >> /etc/apt/sources.list
+
+- name: Configure Name Resolution
+  become: true
+  shell: echo nameserver "{{ hostvars[gold].ec2_private_ip_address }}"
+  when: ec2_tag_Name | lower != "gold"
+
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+    upgrade: 'yes'
+
+- name: Install common packages
+  become: true
+  apt:
+    name: ['curl','wget','apt-transport-https','dirmngr','rsync','tmux']
+    state: latest   
+
+    # Add multiple routes
+    # Persistency 
+    #- name: Add Routing rules
+    #  become: true
+    #shell: "{{ item }}"
+    #with_items:
+    #-  sed -i '/iface eth0 inet dhcp/a up /sbin/route add -net {{ admin_vpn | quote }} gw {{ admin_vpn_gateway | quote }}' /etc/network/interfaces

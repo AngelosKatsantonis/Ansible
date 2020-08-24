@@ -1,0 +1,56 @@
+---
+- name: Get EC2 instance ID for host "{{ ec2_tag_Name }}"
+  run_once: true
+  ec2_instance_info:
+    filters:
+      "tag:Name": "{{ ec2_tag_Name }}"
+    region: "{{ ec2_region }}"
+  register: instances
+  delegate_to: 127.0.0.1 
+
+- name: Setting ec2 host "{{ ec2_tag_Name }}" state to "{{ ec2_state }}" 
+  run_once: true
+  ec2:
+    state: "{{ ec2_state }}"
+    wait: true
+    instance_ids: "{{instances|json_query('instances[*].instance_id')}}"
+    region: "{{ ec2_region }}"
+  when: 
+    - instances
+    - ec2_state | lower in 'running,restarted,stopped,absent'
+  delegate_to: 127.0.0.1 
+    
+- name: Waiting for ec2 host "{{ ec2_tag_Name }}" to boot by checking the ssh port
+  wait_for: 
+    host: "{{item.public_ip_address}}"
+    port: 22 
+    delay: 5 
+    timeout: 300 
+    state: started
+  with_items: "{{ instances.instances }}"
+  when:
+    - instances      
+    - ec2_state | lower == "running" or ec2_state | lower == "restarted"
+    - ec2_tag_Name | lower == "gold"
+  delegate_to: 127.0.0.1 
+
+- name: Waiting for ec2 host "{{ ec2_tag_Name }}" to boot by checking the ssh port
+  wait_for: 
+    host: "{{item.private_ip_address}}"
+    port: 22 
+    delay: 5 
+    timeout: 300 
+    state: started
+  with_items: "{{ instances.instances }}"
+  when:
+    - instances      
+    - ec2_state | lower == "running" or ec2_state | lower == "restarted"
+    - ec2_tag_Name | lower != "gold"
+  delegate_to: 127.0.0.1 
+
+- name: Refresh hosts inventory list
+  meta: refresh_inventory
+  when: 
+    - instances
+    - ec2_state | lower in 'running,restarted,stopped,absent'
+  delegate_to: 127.0.0.1 

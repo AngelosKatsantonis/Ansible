@@ -1,0 +1,10 @@
+- hosts: tag_Name_{{ ec2_tag_Name }}
+  gather_facts: true
+  user: admin
+  tasks:
+    - include_role:
+        name: configure_server_commons
+    - include_role:
+        name: manage_ec2_instance    
+      vars:
+        ec2_state: "restarted"

@@ -1,0 +1,6 @@
+common_packages:
+  - curl 
+  - wget 
+  - apt-transport-https
+  - dirmngr
+  - rsync

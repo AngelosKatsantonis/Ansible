@@ -1,0 +1,10 @@
+# This variables are meant to override defaults set in roles
+# This is the gold server so we will use a different key
+ec2_keypair: "master"
+# Specific security rules applying to the gold server
+# Has to be defined beforehand
+ec2_security_group: "gold"
+# Unique name of the instance
+ec2_tag_Name: "gold"
+# This key is copied to gold server so that we can ssh from gold to target servers
+key_src: "/home/aka/.ssh/slaves.pem"

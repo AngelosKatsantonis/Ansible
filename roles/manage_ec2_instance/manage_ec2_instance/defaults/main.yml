@@ -1,0 +1,8 @@
+ec2_region: "eu-west-1"
+ec2_tag_Name: "dummy"
+# States can be one of:
+# running - To start an instance
+# stopped - To stop an instance
+# restarted - To restart an instance
+# absent - To terminate an instance, this will erase the root volume of the instance also
+ec2_state: "running" 

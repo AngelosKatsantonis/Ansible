@@ -1,0 +1,89 @@
+---
+# Requires the existence of /home/aka/,aws/awscreds.sh (script to export creds with valid aws creds)
+# /etc/ansible/hosts /etc/ansible/ec2.ini /etc/ansible/<playbooks/roles/scripts>
+#
+- name: Add ansible repo to sources and ansible key to key server
+  become: true
+  shell: "{{ item }}"
+  with_items:
+    - echo  "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" > /etc/apt/sources.list.d/ansible.list
+    - apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+
+- name: Install ansible
+  become: true
+  apt:
+    name: ['python3','python3-boto','ansible']
+    state: present      
+    update_cache: yes
+
+- name: Copy hosts
+  become: true
+  copy:
+    src: "templates/hosts"
+    dest: "/etc/ansible/hosts"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy ini
+  become: true
+  copy:
+    src: "templates/ec2.ini"
+    dest: "/etc/ansible/ec2.ini"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy cfg
+  become: true
+  copy:
+    src: "templates/ansible.cfg"
+    dest: "/etc/ansible/ansible.cfg"
+    owner: root
+    group: root
+    mode: '0644'
+          
+- name: Create directory to store aws creds
+  become: true
+  file:
+    path: "/root/.aws"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy aws creds
+  become: true
+  copy:
+    src: "templates/awscreds.sh"
+    dest: "/root/.aws/awscreds.sh"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Synchronize playbooks
+  become: true
+  synchronize:
+    src: "../playbooks/"
+    dest: "/etc/ansible/playbooks/"
+    archive: no
+    delete: yes
+    recursive: yes
+
+- name: Synchronize scripts
+  become: true
+  synchronize:
+    src: "../scripts/"
+    dest: "/etc/ansible/scripts/"
+    archive: no
+    delete: yes
+    recursive: yes
+
+- name: Synchronize roles
+  become: true
+  synchronize:
+    src: "../roles/"
+    dest: "/etc/ansible/roles/"
+    archive: no
+    delete: yes
+    recursive: yes

@@ -1,0 +1,62 @@
+- name: Install unbound
+  become: true
+  apt:
+    name: unbound
+    state: present      
+    update_cache: yes
+
+- name: Stop unbound
+  become: true
+  service:
+    name: unbound
+    state: stopped
+
+- name: Copy dynamic.conf
+  become: true
+  template:
+    src: templates/dynamic.conf
+    dest: /etc/unbound/dynamic.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy unbound.conf.d
+  become: true
+  template:
+    src: "{{ item }}"
+    dest: /etc/unbound/unbound.conf.d/{{item | basename}}
+    owner: root
+    group: root
+    mode: '0644'
+  with_fileglob: "templates/unbound.conf.d/*"
+
+- name: Copy service definitions
+  become: true
+  template:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/{{item | basename}}
+    owner: root
+    group: root
+    mode: '0644'
+  with_fileglob: "templates/services/*"
+          
+- name: just force systemd to reread configs (2.4 and above)
+  become: true
+  systemd:
+    daemon_reload: yes
+
+- name: Start unbound
+  become: true
+  service:
+    name: unbound
+    state: started
+
+- name: Start unbound2
+  become: true
+  service:
+    name: unbound2
+    state: started
+
+- name: Update Name Resolution
+  become: true
+  shell: echo nameserver {{ hostvars[inventory_hostname].ec2_private_ip_address }} > /etc/resolv.conf

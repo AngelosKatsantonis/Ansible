@@ -1,0 +1,9 @@
+# Key src and dest are by default set to /root/.ssh/id_rsa 
+- name: Copy key "{{ key_src }}" to server
+  become: true
+  copy:
+    src: "{{ key_src }}"
+    dest: "{{ key_dest }}"
+    owner: root
+    group: root
+    mode: '0600'
