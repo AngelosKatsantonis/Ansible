@@ -15,6 +15,6 @@
 - name: Install docker
   become: true
   apt:
-    name: ['docker-ce', 'docker-ce-cli','containerd.io']
+    name: ['docker-ce', 'docker-ce-cli','containerd.io', 'docker-compose']
     state: latest
     update_cache: yes
