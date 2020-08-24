@@ -1,0 +1,6 @@
+- hosts: tag_Name_{{ ec2_tag_Name }} 
+  gather_facts: true
+  user: admin
+  tasks:
+    - include_role:
+        name: setup_docker
