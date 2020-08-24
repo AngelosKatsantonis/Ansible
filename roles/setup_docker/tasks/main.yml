@@ -1,0 +1,20 @@
+- name: Install pre-required packages
+  become: true
+  apt:
+    name: ['ca-certificates', 'gnupg-agent','software-properties-common']
+    state: latest
+    update_cache: yes
+
+- name: Add docker public key and repositories
+  become: true
+  shell: "{{ item }}"
+  with_items:
+    - curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+    - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+- name: Install docker
+  become: true
+  apt:
+    name: ['docker-ce', 'docker-ce-cli','containerd.io']
+    state: latest
+    update_cache: yes
