@@ -9,9 +9,9 @@
     - include_role:
         name: setup_ansible    
     - include_role:
-        name: setup_docker    
-    - include_role:
         name: setup_unbound    
+    - include_role:
+        name: setup_docker    
     - include_role:
         name: manage_ec2_instance    
       vars:
