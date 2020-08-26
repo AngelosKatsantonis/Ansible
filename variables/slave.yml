@@ -1,0 +1,3 @@
+ec2_image: "ami-01655def0ab0ec26a"
+ec2_tag_Name: "slave"
+distro: "buster"

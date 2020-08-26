@@ -11,4 +11,4 @@ python3 -m virtualenv ansible_env
 source ansible_env/bin/activate
 pip3 install ansible,boto3,boto
 mkdir -p /etc/ansible
-cp -R ansible/* /etc/ansible
+cp -R ansible/* /etc/ansible/

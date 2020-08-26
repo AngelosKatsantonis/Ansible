@@ -4,3 +4,4 @@ common_packages:
   - apt-transport-https
   - dirmngr
   - rsync
+distro: "stretch"

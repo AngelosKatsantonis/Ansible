@@ -37,7 +37,21 @@
     - echo deb http://deb.debian.org/debian/ oldstable main > /etc/apt/sources.list
     - echo deb http://deb.debian.org/debian/ oldstable-updates main >> /etc/apt/sources.list
     - echo deb http://deb.debian.org/debian-security oldstable/updates main >> /etc/apt/sources.list
-    - echo deb http://ftp.debian.org/debian stretch-backports main >> /etc/apt/sources.list
+  when:
+        distro | lower != "stretch"
+
+- name: Configure Hostname, Hosts, Repos
+  become: true
+  shell: "{{ item }}"
+  with_items:
+    - hostname "{{ ec2_tag_Name | quote }}"
+    - echo "{{ ec2_tag_Name | quote }}" > /etc/hostname 
+    - echo 127.0.0.1 "{{ ec2_tag_Name | quote }}" >> /etc/hosts
+    - echo deb http://deb.debian.org/debian/ stable main > /etc/apt/sources.list
+    - echo deb http://deb.debian.org/debian/ stable-updates main >> /etc/apt/sources.list
+    - echo deb http://deb.debian.org/debian-security stable/updates main >> /etc/apt/sources.list
+  when:
+        distro | lower != "buster"
 
 - name: Configure Name Resolution
   become: true
