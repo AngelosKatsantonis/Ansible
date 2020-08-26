@@ -9,7 +9,7 @@
     zone: "{{ ec2_zone }}"
     region: "{{ ec2_region }}"
     instance_tags: '{"Type":"{{ec2_instance_type}}", "Name":"{{ec2_tag_Name}}", "Services":"{{ec2_tag_Services}}", "Backup":"{{ec2_tag_Backup}}"}'
-    assign_public_ip: yes
+    assign_public_ip: "{{ assign_public_ip }}" 
     wait: true
     exact_count: "{{ ec2_count }}"
     count_tag:
@@ -59,13 +59,11 @@
 
 - name: Update dns server
   become: true
-  shell: "echo local-data-ptr: \"{{ item.private_ip}}        {{ ec2_tag_Name }}\" >> /etc/unbound/unbound.conf.d/5-static-conf"  
-  with_items: "{{ ec2.instances }}"
-  when: ec2_tag_Name | lower != "gold"
-  
-- name: Update dns server
-  become: true
-  shell: "echo local-data: \"{{ ec2_tag_Name }}.         {{ item.private_ip}}\" >> /etc/unbound/unbound.conf.d/5-static-conf"
+  blockinfile: 
+    path: /etc/unbound/unbound.conf.d/5-static.conf 
+    block: | 
+        local-data-ptr: "{{ item.private_ip}}        {{ ec2_tag_Name }}"
+        local-data: "{{ ec2_tag_Name }}.         A {{ item.private_ip}}"
   with_items: "{{ ec2.instances }}"
   when: ec2_tag_Name | lower != "gold"
 

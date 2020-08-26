@@ -37,8 +37,9 @@
     - echo deb http://deb.debian.org/debian/ oldstable main > /etc/apt/sources.list
     - echo deb http://deb.debian.org/debian/ oldstable-updates main >> /etc/apt/sources.list
     - echo deb http://deb.debian.org/debian-security oldstable/updates main >> /etc/apt/sources.list
+    - echo deb http://ftp.debian.org/debian stretch-backports main >> /etc/apt/sources.list
   when:
-        distro | lower != "stretch"
+        distro | lower == "stretch"
 
 - name: Configure Hostname, Hosts, Repos
   become: true
@@ -51,11 +52,11 @@
     - echo deb http://deb.debian.org/debian/ stable-updates main >> /etc/apt/sources.list
     - echo deb http://deb.debian.org/debian-security stable/updates main >> /etc/apt/sources.list
   when:
-        distro | lower != "buster"
+        distro | lower == "buster"
 
 - name: Configure Name Resolution
   become: true
-  shell: echo nameserver "{{ hostvars[gold].ec2_private_ip_address }}" > /etc/resolv.conf
+  shell: echo nameserver "{{ hostvars['gold'].ec2_private_ip_address }}" > /etc/resolv.conf
   when: ec2_tag_Name | lower != "gold"
 
 - name: Update and upgrade apt packages

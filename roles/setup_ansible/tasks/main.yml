@@ -1,7 +1,4 @@
 ---
-# Requires the existence of /home/aka/,aws/awscreds.sh (script to export creds with valid aws creds)
-# /etc/ansible/hosts /etc/ansible/ec2.ini /etc/ansible/<playbooks/roles/scripts>
-#
 - name: Add ansible repo to sources and ansible key to key server
   become: true
   shell: "{{ item }}"
@@ -12,7 +9,7 @@
 - name: Install ansible
   become: true
   apt:
-    name: ['python3','python3-boto','ansible']
+    name: ['python3','python3-boto','python3-boto3','ansible']
     state: present      
     update_cache: yes
 
@@ -61,7 +58,7 @@
     group: root
     mode: '0755'
 
-- name: Synchronize playbooks
+- name: Copy playbooks
   become: true
   synchronize:
     src: "../playbooks/"
@@ -70,7 +67,7 @@
     delete: yes
     recursive: yes
 
-- name: Synchronize scripts
+- name: Copy scripts
   become: true
   synchronize:
     src: "../scripts/"
@@ -79,11 +76,20 @@
     delete: yes
     recursive: yes
 
-- name: Synchronize roles
+- name: Copy roles
   become: true
   synchronize:
     src: "../roles/"
     dest: "/etc/ansible/roles/"
+    archive: no
+    delete: yes
+    recursive: yes
+
+- name: Copy variables
+  become: true
+  synchronize:
+    src: "../variables/"
+    dest: "/etc/ansible/variables/"
     archive: no
     delete: yes
     recursive: yes

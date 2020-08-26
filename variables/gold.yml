@@ -6,5 +6,4 @@ ec2_keypair: "master"
 ec2_security_group: "gold"
 # Unique name of the instance
 ec2_tag_Name: "gold"
-# This key is copied to gold server so that we can ssh from gold to target servers
-key_src: "/home/aka/.ssh/slaves.pem"
+assign_public_ip: "yes"

@@ -1,2 +1,2 @@
 key_src: "~/.ssh/slaves.pem"
-key_dest: "/root/.ssh/slaves.pem"
+key_dest: "~/.ssh/slaves.pem"

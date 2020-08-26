@@ -24,3 +24,4 @@ ec2_subnet_id: "subnet-02d53beda24646218"
 ec2_security_group: "default"
 # The user to run the playbook as
 ec2_user: "admin"
+assign_public_ip: "yes"
