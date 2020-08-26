@@ -9,8 +9,7 @@ pip install wheel
 pip install boto
 pip install boto3
 pip install ansible
-git clone https://github.com/AngelosKatsantonis/Ansible.git
-sudo mkdir -p /etc/ansible
-sudo cp -R Ansible/* /etc/ansible/
+git clone https://github.com/AngelosKatsantonis/nsible.git
+sudo ln -s ~/ansible /etc/
 mkdir -p ~/.aws
 cp Ansible/roles/setup_ansible/templates/awscreds.sh ~/.aws/
