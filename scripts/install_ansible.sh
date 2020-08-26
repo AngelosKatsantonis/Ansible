@@ -1,14 +1,16 @@
 #!/bin/bash
 
-# Requires python3,curl
-# On Debian sudo apt install python3, curl
+sudo apt install python3
 cd ~
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python3 get-pip.py --user
-pip3 install virtualenv
+python3 -m venv ansible_env
+source ~/ansible_env/bin/activate
+pip install --upgrade pip
+pip install wheel
+pip install boto
+pip install boto3
+pip install ansible
 git clone https://github.com/AngelosKatsantonis/Ansible.git
-python3 -m virtualenv ansible_env
-source ansible_env/bin/activate
-pip3 install ansible,boto3,boto
-mkdir -p /etc/ansible
-cp -R ansible/* /etc/ansible/
+sudo mkdir -p /etc/ansible
+sudo cp -R Ansible/* /etc/ansible/
+mkdir -p ~/.aws
+cp Ansible/roles/setup_ansible/templates/awscreds.sh ~/.aws/

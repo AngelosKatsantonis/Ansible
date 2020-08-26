@@ -1,3 +1,3 @@
 {
-	"dns": ["{{ hostvars[gold].ec2_private_ip_address }}"]
+	"dns": ["{{ hostvars['gold'].ec2_private_ip_address }}"]
 }
