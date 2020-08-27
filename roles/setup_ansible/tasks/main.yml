@@ -16,8 +16,8 @@
 - name: Clone ansible git repo
   become: true
   git:
-    repo: "{{ ansible_repo }}"
-    dest: ~ 
+    repo: "https://{{ githubuser | urlencode }}:{{ githubpassword | urlencode }}@github.com/AngelosKatsantonis/{{ ansible_repo }}"
+    dest: ~/ansible
     clone: yes
 
 - name: Create directory to store aws creds

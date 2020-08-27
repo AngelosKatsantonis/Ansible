@@ -1,6 +1,14 @@
 - hosts: tag_Name_{{ ec2_tag_Name }} 
-  gather_facts: true
+  gather_facts: false
   user: admin
+  vars_prompt:
+    - name: githubuser
+      prompt: "What is your git username?"
+      private: no
+    - name: githubpassword
+      prompt: "What is your git password?"
+      private: yes
+
   tasks:
     - include_role:
         name: copy_key

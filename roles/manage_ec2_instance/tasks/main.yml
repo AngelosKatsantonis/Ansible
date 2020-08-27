@@ -1,6 +1,6 @@
 - name: Get EC2 instance ID for host "{{ ec2_tag_Name }}"
   run_once: true
-  ec2_instance_info:
+  ec2_instance_facts:
     filters:
       "tag:Name": "{{ ec2_tag_Name }}"
     region: "{{ ec2_region }}"
