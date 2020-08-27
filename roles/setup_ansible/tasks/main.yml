@@ -19,6 +19,7 @@
     repo: "https://{{ githubuser | urlencode }}:{{ githubpassword | urlencode }}@github.com/AngelosKatsantonis/{{ ansible_repo }}"
     dest: ~/ansible
     clone: yes
+    version: gold
 
 - name: Create directory to store aws creds
   become: true
