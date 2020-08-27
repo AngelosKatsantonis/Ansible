@@ -18,7 +18,7 @@
     - instances
     - ec2_state | lower in 'running,restarted,stopped,absent'
   delegate_to: 127.0.0.1 
-    
+
 - name: Waiting for ec2 host "{{ ec2_tag_Name }}" to boot by checking the ssh port
   wait_for: 
     host: "{{item.public_ip_address}}"

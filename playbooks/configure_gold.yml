@@ -1,5 +1,5 @@
 - hosts: tag_Name_{{ ec2_tag_Name }} 
-  gather_facts: false
+  gather_facts: yes
   user: admin
   vars_prompt:
     - name: githubuser
