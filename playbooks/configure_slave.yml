@@ -5,6 +5,8 @@
     - include_role:
         name: configure_server_commons
     - include_role:
+        name: setup_docker    
+    - include_role:
         name: manage_ec2_instance    
       vars:
         ec2_state: "restarted"

@@ -13,33 +13,13 @@
     state: present      
     update_cache: yes
 
-- name: Copy hosts
+- name: Clone ansible git repo
   become: true
-  copy:
-    src: "templates/hosts"
-    dest: "/etc/ansible/hosts"
-    owner: root
-    group: root
-    mode: '0755'
+  git:
+    repo: "{{ ansible_repo }}"
+    dest: ~ 
+    clone: yes
 
-- name: Copy ini
-  become: true
-  copy:
-    src: "templates/ec2.ini"
-    dest: "/etc/ansible/ec2.ini"
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Copy cfg
-  become: true
-  copy:
-    src: "templates/ansible.cfg"
-    dest: "/etc/ansible/ansible.cfg"
-    owner: root
-    group: root
-    mode: '0644'
-          
 - name: Create directory to store aws creds
   become: true
   file:
@@ -57,39 +37,3 @@
     owner: root
     group: root
     mode: '0755'
-
-- name: Copy playbooks
-  become: true
-  synchronize:
-    src: "../playbooks/"
-    dest: "/etc/ansible/playbooks/"
-    archive: no
-    delete: yes
-    recursive: yes
-
-- name: Copy scripts
-  become: true
-  synchronize:
-    src: "../scripts/"
-    dest: "/etc/ansible/scripts/"
-    archive: no
-    delete: yes
-    recursive: yes
-
-- name: Copy roles
-  become: true
-  synchronize:
-    src: "../roles/"
-    dest: "/etc/ansible/roles/"
-    archive: no
-    delete: yes
-    recursive: yes
-
-- name: Copy variables
-  become: true
-  synchronize:
-    src: "../variables/"
-    dest: "/etc/ansible/variables/"
-    archive: no
-    delete: yes
-    recursive: yes

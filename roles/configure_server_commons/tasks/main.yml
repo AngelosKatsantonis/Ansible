@@ -68,7 +68,7 @@
 - name: Install common packages
   become: true
   apt:
-    name: ['curl','wget','apt-transport-https','dirmngr','rsync','tmux']
+    name: ['curl','wget','apt-transport-https','dirmngr','rsync','tmux','git','aptitude']
     state: latest   
 
     # Add multiple routes
