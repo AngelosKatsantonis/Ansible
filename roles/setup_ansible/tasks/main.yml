@@ -20,6 +20,12 @@
     dest: ~/ansible
     clone: yes
 
+- name: Copy ec2 ini file for use within vpc
+  copy:
+    src: /templates/ec2.ini
+    dest: ~/ansible/ec2.ini
+    mode: '0644'
+
 - name: Create directory to store aws creds
   become: true
   file:
